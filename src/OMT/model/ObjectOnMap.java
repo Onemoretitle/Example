@@ -44,7 +44,7 @@ public abstract class ObjectOnMap {
 
     /**
      * Установка ординаты
-     * @param x новое значение ординаты
+     * @param y новое значение ординаты
      */    
     protected void setY(int y) {
        if (y >= map.getHeight())

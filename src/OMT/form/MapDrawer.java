@@ -4,11 +4,8 @@ package OMT.form;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import OMT.model.Graminivorous;
-import OMT.model.Grass;
-import OMT.model.Map;
-import OMT.model.ObjectOnMap;
-import OMT.model.Predator;
+
+import OMT.model.*;
 
 /**
  * Класс для отрисовки карты на форме
@@ -34,7 +31,7 @@ public class MapDrawer {
      * Размер кружочка для животного
      */
     private static final int ANIMAL_SIZE=5;
-    
+    private static final int MONSTER_SIZE=20;
     /**
      * Конструктор
      * @param map карта для отрисовки
@@ -94,6 +91,14 @@ public class MapDrawer {
         ArrayList<ObjectOnMap> objects = map.getAllObjects();
         for (ObjectOnMap obj : objects)
         {
+
+            if (obj instanceof Shai_Hulud){
+                Shai_Hulud sh = (Shai_Hulud) obj;
+                g.setColor(Color.white);
+                g.fillOval(obj.getX()*CELL_SIZE, obj.getY()*CELL_SIZE, MONSTER_SIZE, MONSTER_SIZE);
+            }
+
+
             if (obj instanceof Graminivorous)
             {
                 Graminivorous gr = (Graminivorous)obj;
@@ -109,9 +114,13 @@ public class MapDrawer {
             }
             else if (obj instanceof Predator)
             {
-                g.setColor(Color.RED);
-                g.fillOval(obj.getX()*CELL_SIZE+ANIMAL_SIZE, obj.getY()*CELL_SIZE+ANIMAL_SIZE, ANIMAL_SIZE, ANIMAL_SIZE);
                 Predator pr = (Predator)obj;
+                if (pr.isAlive())
+                    g.setColor(Color.RED);
+                else
+                    g.setColor(Color.GRAY);
+                g.fillOval(obj.getX()*CELL_SIZE+ANIMAL_SIZE, obj.getY()*CELL_SIZE+ANIMAL_SIZE, ANIMAL_SIZE, ANIMAL_SIZE);
+
                 g.drawOval((obj.getX()-pr.getSight())*CELL_SIZE, 
                            (obj.getY()-pr.getSight())*CELL_SIZE, 2*pr.getSight()*CELL_SIZE, 2*pr.getSight()*CELL_SIZE);
                 g.setColor(Color.BLACK);

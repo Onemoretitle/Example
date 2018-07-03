@@ -31,7 +31,7 @@ public class Map {
      * @param gramonivorosCount количество травоядных
      * @param predatorCount количество хищников
      */
-    public void randomGenerate(int grassCount, int gramonivorosCount, int predatorCount)
+    public void randomGenerate(int grassCount, int gramonivorosCount, int predatorCount, int shai_huludCount)
     {
         Random r = new Random();
         for (int i=0;i<grassCount;i++)
@@ -46,8 +46,13 @@ public class Map {
         }
         for (int i=0;i<predatorCount;i++)
         {
-            ObjectOnMap g = new Predator(r.nextInt(), r.nextInt(), this);
-            objects.add(g);
+            ObjectOnMap p = new Predator(r.nextInt(), r.nextInt(), this);
+            objects.add(p);
+        }
+        for (int i=0;i<shai_huludCount;i++)
+        {
+            ObjectOnMap sh = new Shai_Hulud(r.nextInt(), r.nextInt(), this);
+            objects.add(sh);
         }
     }
     
