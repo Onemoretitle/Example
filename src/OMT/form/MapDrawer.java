@@ -39,7 +39,6 @@ public class MapDrawer {
     public MapDrawer( Map map)
     {
         this.map = map;
-        
     }
     
     /**
@@ -96,10 +95,32 @@ public class MapDrawer {
                 Shai_Hulud sh = (Shai_Hulud) obj;
                 g.setColor(Color.white);
                 g.fillOval(obj.getX()*CELL_SIZE, obj.getY()*CELL_SIZE, MONSTER_SIZE, MONSTER_SIZE);
+                g.drawOval((obj.getX()-sh.getSight())*CELL_SIZE,
+                        (obj.getY()-sh.getSight())*CELL_SIZE, 2*sh.getSight()*CELL_SIZE, 2*sh.getSight()*CELL_SIZE);
+                g.setColor(Color.BLACK);
+            }
+            else if (obj instanceof Shelter)
+            {
+                Shelter S = (Shelter)obj;
+                float volume = S.getVolumePrecentage();
+                g.setColor(new Color(1,1 - (volume / 2),1 - volume));
+                g.fillRect(obj.getX()*CELL_SIZE+1, obj.getY()*CELL_SIZE+1, CELL_SIZE-1, CELL_SIZE-1);
+                g.setColor(Color.BLACK);
+            } else if (obj instanceof Caravan)
+            {
+                Caravan c = (Caravan) obj;
+                if (c.isAlive())
+                    g.setColor(Color.black);
+                else
+                    g.setColor(Color.GRAY);
+                g.fillOval(obj.getX()*CELL_SIZE, obj.getY()*CELL_SIZE, ANIMAL_SIZE, ANIMAL_SIZE);
+                g.drawOval((obj.getX()-c.getSight())*CELL_SIZE,
+                        (obj.getY()-c.getSight())*CELL_SIZE, 2*c.getSight()*CELL_SIZE, 2*c.getSight()*CELL_SIZE);
+                g.setColor(Color.BLACK);
             }
 
 
-            if (obj instanceof Graminivorous)
+          /*  if (obj instanceof Graminivorous)
             {
                 Graminivorous gr = (Graminivorous)obj;
                 if (gr.isAlive())
@@ -133,7 +154,7 @@ public class MapDrawer {
                 g.setColor(new Color(1-volume,1,1-volume));
                 g.fillRect(obj.getX()*CELL_SIZE+1, obj.getY()*CELL_SIZE+1, CELL_SIZE-1, CELL_SIZE-1);
                 g.setColor(Color.BLACK);
-            }
+            }*/
         }    
     }
 }

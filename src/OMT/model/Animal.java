@@ -1,4 +1,3 @@
-
 package OMT.model;
 
 import java.util.Random;

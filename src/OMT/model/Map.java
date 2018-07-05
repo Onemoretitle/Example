@@ -27,19 +27,23 @@ public class Map {
     
     /**
      * Генерация животных для карты
-     * @param grassCount количество участков с травой
+     * @param shelterCount количество поселений
      * @param gramonivorosCount количество травоядных
      * @param predatorCount количество хищников
      */
-    public void randomGenerate(int grassCount, int gramonivorosCount, int predatorCount, int shai_huludCount)
+    public void randomGenerate(int shelterCount, int gramonivorosCount, int predatorCount, int shai_huludCount)
     {
         Random r = new Random();
-        for (int i=0;i<grassCount;i++)
+        for (int i=0;i<shelterCount;i++)
         {
-            Grass g = new Grass(r.nextInt(width), r.nextInt(height), this);
-            objects.add(g);
+            int _x = r.nextInt(width),_y = r.nextInt(height);
+            Shelter s = new Shelter(_x, _y, this);
+            Caravan c = new Caravan(_x, _y, this);
+            objects.add(s);
+            for(int j = 0; j < 1 + (int) (Math.random() * 3); j++)
+                objects.add(c);
         }
-        for (int i=0;i<gramonivorosCount;i++)
+      /*  for (int i=0;i<gramonivorosCount;i++)
         {
             ObjectOnMap g = new Graminivorous(r.nextInt(width), r.nextInt(height), this);
             objects.add(g);
@@ -48,7 +52,7 @@ public class Map {
         {
             ObjectOnMap p = new Predator(r.nextInt(), r.nextInt(), this);
             objects.add(p);
-        }
+        }*/
         for (int i=0;i<shai_huludCount;i++)
         {
             ObjectOnMap sh = new Shai_Hulud(r.nextInt(), r.nextInt(), this);

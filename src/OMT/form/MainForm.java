@@ -19,7 +19,7 @@ public class MainForm extends javax.swing.JFrame {
 	/**
      * Карта, на которой производится моделирование
      */
-    private Map map = new Map(50,50);
+    private Map map = new Map(55,80);
     /**
      * Объект для отрисовки карты
      */
@@ -33,7 +33,7 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new OMT.form MainForm
      */
     public MainForm() {
-        map.randomGenerate(1000,10,100, 1);
+        map.randomGenerate(50,10,100, 1);
         
         // Таймер
         timer = new Timer (300, new ActionListener(){

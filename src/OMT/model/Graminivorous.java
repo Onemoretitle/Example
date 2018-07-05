@@ -18,10 +18,28 @@ public class Graminivorous extends Animal{
     private int meatVolume;
 
     /**
+     * Количество воды
+     */
+    private int waterVolume;
+
+    /**
+     * Количество груза
+     */
+    private int cargoVolume;
+    /**
      * Скорость поедания травы, для всех одинаковая
      */
-    private static final int EAT_STEP = 30; 
-    
+    private static final int EAT_STEP = 30;
+    /**
+     * Скорость поедания травы, для всех одинаковая
+     */
+    private static final int WATER_CONSUMPTION = 10;
+
+    /**
+     * Скорость поедания травы, для всех одинаковая
+     */
+    private static final int CARGO_DAMAGE = 10;
+
     /**
      * Конструктор
      */
