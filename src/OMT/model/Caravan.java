@@ -75,19 +75,20 @@ public class Caravan extends Animal{
                     return;
                 }
             }
-            else if (lifeVolume > 0){
-                for (ObjectOnMap shelters : objects)
-                {
-                    if (shelters instanceof Shelter)
-                    {
-                        lifeVolume -= LIFE_STEP;
-                        goToObject(shelters);
-                        return;
-                    }
-                }
-            } else
-                die();
+           /* else*/
         }
+        if (lifeVolume > 0){
+            for (ObjectOnMap shelters : objects)
+            {
+                if (shelters instanceof Shelter && (shelters.getX()!= xHome && shelters.getY()!= yHome))
+                {
+                    lifeVolume -= LIFE_STEP;
+                    goToObject(shelters);
+                    return;
+                }
+            }
+        } else
+            die();
 
     }
 
