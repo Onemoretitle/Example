@@ -138,5 +138,6 @@ public class Shelter extends ObjectOnMap{
     int getCARGO() {
         return CARGO;
     }
+
     }
 

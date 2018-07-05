@@ -36,9 +36,13 @@ public class Caravan extends Animal{
      */
     private static final int WATER_CONSUMPTION = 10;
     /**
+     * Торговые навыки
+     */
+    private static final int TRADE_SKILLS = 10;
+    /**
      * Скорость потребления воды, для всех одинаковая
      */
-    private static final int LIFE_STEP = 10;
+    private static final int LIFE_STEP = 1;
     /**
      * Конструктор
      */
@@ -61,30 +65,34 @@ public class Caravan extends Animal{
         ArrayList<ObjectOnMap> objects = getMap().getVisibleObjects(this, getSight());
         for (ObjectOnMap obj : objects)
         {
-            if (obj instanceof Shelter)
+            if (obj instanceof Shelter && (obj.getX()!= xHome && obj.getY()!= yHome))
             {
                 if (obj.getX()== getX() && obj.getY()== getY())
                 {
-                    getRest(lifeTank, waterTank);
+                   // getSomeRestAndKeepGoing(lifeTank, waterTank, obj);
+                    ((Shelter)obj).giveWater(WATER_CONSUMPTION);
+                    ((Shelter)obj).trade(TRADE_SKILLS);
+                    return;
                 }
             }
-            else {
-                lifeVolume -= LIFE_STEP;
-            }
+            else if (lifeVolume > 0){
+                for (ObjectOnMap shelters : objects)
+                {
+                    if (shelters instanceof Shelter)
+                    {
+                        lifeVolume -= LIFE_STEP;
+                        goToObject(shelters);
+                        return;
+                    }
+                }
+            } else
+                die();
         }
 
-        for (ObjectOnMap obj : objects)
-        {
-            if (obj instanceof Shelter && (xHome != getX() && yHome != getY()))
-            {
-                    goToObject(obj);
-                    return;
-            }
-        }
-       // goRandom();
     }
 
-    private void getRest(int lifeTank, int waterTank) {
+    private void getSomeRestAndKeepGoing(int lifeTank, int waterTank, ObjectOnMap obj) {
+        ((Shelter) obj).giveWater(WATER_CONSUMPTION);
 
     }
 
