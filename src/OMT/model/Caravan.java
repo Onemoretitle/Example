@@ -72,8 +72,6 @@ public class Caravan extends Animal{
                 targets.add(obj);
         }
         range = targets.size();
-        coin = 0 + (int) (Math.random() * range);
-
     }
 
     @Override
@@ -100,7 +98,7 @@ public class Caravan extends Animal{
                 }
             }
         }
-
+        coin = 0 + (int) (Math.random() * range);
         if (lifeVolume > 0){
             for (ObjectOnMap shelters : targets)
             {
