@@ -47,6 +47,10 @@ public class Caravan extends Animal{
      * Отдохнул? Иди дальше
      */
     private boolean HasRest;
+
+    private int range;
+    private int coin;
+    private ArrayList<ObjectOnMap> targets = new ArrayList<ObjectOnMap>();
     /**
      * Конструктор
      */
@@ -61,10 +65,20 @@ public class Caravan extends Animal{
         xHome = x;
         yHome = y;
 
+        ArrayList<ObjectOnMap> objects = getMap().getVisibleObjects(this, getSight());
+        for (ObjectOnMap obj : objects)
+        {
+            if (obj instanceof Shelter)
+                targets.add(obj);
+        }
+        range = targets.size();
+        coin = 0 + (int) (Math.random() * range);
+
     }
 
     @Override
     public void liveStep() {
+
         if (!isAlive())
             return;
         HasRest = false;
@@ -88,20 +102,38 @@ public class Caravan extends Animal{
         }
 
         if (lifeVolume > 0){
-            for (ObjectOnMap shelters : objects)
+            for (ObjectOnMap shelters : targets)
             {
-                if (shelters instanceof Shelter && (shelters.getX()!= xHome && shelters.getY()!= yHome))
+                if (shelters.getX()!= xHome && shelters.getY()!= yHome)
                 {
-                    //if (1 + (int) (Math.random() * 4) == 1)
-                  // {
+                    if (waterVolume > 0)
+                        waterVolume -= WATER_CONSUMPTION;
+                    else
+                        lifeVolume -= LIFE_STEP;
+                    goToObject(targets.get(coin));
+                    HasRest = false;
+                    return;
+
+                   /* if (coin == 1)
+                    {
                         if (waterVolume > 0)
                             waterVolume -= WATER_CONSUMPTION;
                         else
                             lifeVolume -= LIFE_STEP;
-                        goToObject(shelters);
+                        target = shelters;
+                        goToObject(target);
                         HasRest = false;
                         return;
-                  //  }
+                    }
+                    else if (target != null){
+                        if (waterVolume > 0)
+                            waterVolume -= WATER_CONSUMPTION;
+                        else
+                            lifeVolume -= LIFE_STEP;
+                        goToObject(target);
+                        HasRest = false;
+                        return;
+                    }*/
                 }
             }
         } else
