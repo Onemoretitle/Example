@@ -40,7 +40,7 @@ public class Map {
             Shelter s = new Shelter(_x, _y, this);
             Caravan c = new Caravan(_x, _y, this);
             objects.add(s);
-            for(int j = 0; j < 1 + (int) (Math.random() * 3); j++)
+            for(int j = 0; j < 1 + (int) (Math.random() * 2); j++)
                 objects.add(c);
         }
       /*  for (int i=0;i<gramonivorosCount;i++)

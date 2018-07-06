@@ -44,6 +44,10 @@ public class Caravan extends Animal{
      */
     private static final int LIFE_STEP = 1;
     /**
+     * Отдохнул? Иди дальше
+     */
+    private boolean HasRest;
+    /**
      * Конструктор
      */
     public Caravan(int x, int y, Map map)
@@ -56,35 +60,48 @@ public class Caravan extends Animal{
         waterTank = waterVolume;
         xHome = x;
         yHome = y;
+
     }
 
     @Override
     public void liveStep() {
         if (!isAlive())
             return;
+        HasRest = false;
         ArrayList<ObjectOnMap> objects = getMap().getVisibleObjects(this, getSight());
         for (ObjectOnMap obj : objects)
         {
-            if (obj instanceof Shelter && (obj.getX()!= xHome && obj.getY()!= yHome))
+            if (obj instanceof Shelter && (obj.getX()!= xHome && obj.getY()!= yHome) &&  !HasRest)
             {
-                if (obj.getX()== getX() && obj.getY()== getY())
+                if ((obj.getX()== getX() && obj.getY()== getY()))
                 {
-                   // getSomeRestAndKeepGoing(lifeTank, waterTank, obj);
+                   //getSomeRestAndKeepGoing(lifeTank, waterTank, obj);
                     ((Shelter)obj).giveWater(WATER_CONSUMPTION);
                     ((Shelter)obj).trade(TRADE_SKILLS);
+                    lifeVolume = lifeTank;
+                    xHome = obj.getX();
+                    yHome = obj.getY();
+                    HasRest = true;
                     return;
                 }
             }
-           /* else*/
         }
+
         if (lifeVolume > 0){
             for (ObjectOnMap shelters : objects)
             {
                 if (shelters instanceof Shelter && (shelters.getX()!= xHome && shelters.getY()!= yHome))
                 {
-                    lifeVolume -= LIFE_STEP;
-                    goToObject(shelters);
-                    return;
+                    //if (1 + (int) (Math.random() * 4) == 1)
+                  // {
+                        if (waterVolume > 0)
+                            waterVolume -= WATER_CONSUMPTION;
+                        else
+                            lifeVolume -= LIFE_STEP;
+                        goToObject(shelters);
+                        HasRest = false;
+                        return;
+                  //  }
                 }
             }
         } else
@@ -92,8 +109,8 @@ public class Caravan extends Animal{
 
     }
 
-    private void getSomeRestAndKeepGoing(int lifeTank, int waterTank, ObjectOnMap obj) {
-        ((Shelter) obj).giveWater(WATER_CONSUMPTION);
+    private void getSomeRestAndKeepGoing(int lifeTank, int waterTank, ObjectOnMap obj)
+    {
 
     }
 
@@ -162,5 +179,6 @@ public class Caravan extends Animal{
                 return false;
             }
 
-    }}
+    }
+}
 

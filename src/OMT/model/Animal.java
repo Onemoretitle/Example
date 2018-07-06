@@ -21,7 +21,8 @@ public abstract class Animal extends ObjectOnMap{
     {
         super(x,y,map);
         Random r = new Random();
-        sight = r.nextInt(10)%10 + 1;
+        //sight = r.nextInt(10)%10 + 1;
+        sight = 100;
     }
     
     /**
