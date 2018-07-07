@@ -10,7 +10,8 @@ public abstract class ObjectOnMap {
     private int y;
     /** ссылка на объект карты */
     private Map map;
-    
+    public boolean visited;
+
     /**
      * Конструктор
      * @param x абсцисса
@@ -81,7 +82,12 @@ public abstract class ObjectOnMap {
     {
         return map;
     }
-
+    public void getVisited(){
+        visited = true;
+    }
+    public void getUnvisited(){
+        visited = false;
+    }
 
     
 }

@@ -33,7 +33,7 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new OMT.form MainForm
      */
     public MainForm() {
-        map.randomGenerate(4,10,100, 1);
+        map.randomGenerate(10,10,100, 1);
         
         // Таймер
         timer = new Timer (300, new ActionListener(){

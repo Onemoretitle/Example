@@ -94,7 +94,7 @@ public class Map {
      * @param o2 вротой объект
      * @return квадрат расстояния
      */
-    private int destination(ObjectOnMap o1,ObjectOnMap o2)
+    public int destination(ObjectOnMap o1,ObjectOnMap o2)
     {
         return (o1.getX() - o2.getX())*(o1.getX() - o2.getX()) + (o1.getY() - o2.getY())*(o1.getY() - o2.getY());
     }

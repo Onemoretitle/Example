@@ -34,7 +34,7 @@ public class Caravan extends Animal{
     /**
      * Скорость потребления воды, для всех одинаковая
      */
-    private static final int WATER_CONSUMPTION = 10;
+    private static final int WATER_CONSUMPTION = 1;
     /**
      * Торговые навыки
      */
@@ -44,10 +44,22 @@ public class Caravan extends Animal{
      */
     private static final int LIFE_STEP = 1;
     /**
+     * Скорость потребления воды, для всех одинаковая
+     */
+    private static final int LIFE_RECOVER = 10;
+    /**
+     * Скорость потребления воды, для всех одинаковая
+     */
+    private static final int WATER_RECOVER  = 10;
+    /**
      * Отдохнул? Иди дальше
      */
     private boolean HasRest;
 
+    /**
+     * Текущая цель
+     */
+    private Shelter Target;
     private int range;
     private int coin;
     private ArrayList<ObjectOnMap> targets = new ArrayList<ObjectOnMap>();
@@ -79,37 +91,48 @@ public class Caravan extends Animal{
 
         if (!isAlive())
             return;
-        HasRest = false;
+       // HasRest = false;
+        if(!haveUnvisited())
+            for(int i = 0; i < targets.size(); i++)
+                targets.get(i).getUnvisited();
         ArrayList<ObjectOnMap> objects = getMap().getVisibleObjects(this, getSight());
-        for (ObjectOnMap obj : objects)
-        {
-            if (obj instanceof Shelter && (obj.getX()!= xHome && obj.getY()!= yHome) &&  !HasRest)
+        if (Target != null)
+            for (ObjectOnMap obj : objects)
             {
-                if ((obj.getX()== getX() && obj.getY()== getY()))
+                if (obj instanceof Shelter && !(obj.getX()== xHome && obj.getY()== yHome) && !obj.visited/* &&  !HasRest*/)
                 {
-                   //getSomeRestAndKeepGoing(lifeTank, waterTank, obj);
-                    ((Shelter)obj).giveWater(WATER_CONSUMPTION);
-                    ((Shelter)obj).trade(TRADE_SKILLS);
-                    lifeVolume = lifeTank;
-                    xHome = obj.getX();
-                    yHome = obj.getY();
-                    HasRest = true;
-                    return;
+                    if ((obj.getX()== getX() && obj.getY()== getY()))
+                    {
+
+                        obj.getVisited();
+                       //getSomeRestAndKeepGoing(lifeTank, waterTank, obj);
+                        ((Shelter)obj).giveWater(WATER_RECOVER);
+                        ((Shelter)obj).trade(TRADE_SKILLS);
+                        ((Shelter)obj).restoreLife(LIFE_RECOVER);
+                        //lifeVolume = lifeTank;
+                        xHome = obj.getX();
+                        yHome = obj.getY();
+                       // HasRest = true;
+                        Target = null;
+                        return;
+                    }
                 }
             }
-        }
-        coin = 0 + (int) (Math.random() * range);
+        if(Target == null)
+            Target = searchNearestShelter();
+        //coin = 0 + (int) (Math.random() * range);
         if (lifeVolume > 0){
             for (ObjectOnMap shelters : targets)
             {
-                if (shelters.getX()!= xHome && shelters.getY()!= yHome)
+                if (!(shelters.getX()== xHome && shelters.getY()== yHome))
                 {
                     if (waterVolume > 0)
                         waterVolume -= WATER_CONSUMPTION;
                     else
                         lifeVolume -= LIFE_STEP;
-                    goToObject(targets.get(coin));
-                    HasRest = false;
+                    goToObject(Target);
+                   // goToObject(targets.get(coin));
+                   // HasRest = false;
                     return;
 
                    /* if (coin == 1)
@@ -143,7 +166,33 @@ public class Caravan extends Animal{
     {
 
     }
+    private Shelter searchNearestShelter () {
+        ArrayList<ObjectOnMap> objects = getMap().getVisibleObjects(this, getSight());
 
+        Map map = getMap();
+        int minDistance = Integer.MAX_VALUE;
+        Shelter result = null;
+
+        for (ObjectOnMap obj : objects)
+            if (obj instanceof Shelter && !(obj.getX() == getX() && obj.getY() == getY())) {
+                int curDistance = getMap().destination(this, obj);
+                if (curDistance < minDistance) {
+                    minDistance = curDistance;
+                    result = (Shelter) obj;
+                }
+            }
+
+        return result;
+    }
+
+    private boolean haveUnvisited() {
+        for(int i = 0; i < targets.size(); i ++){
+            if (!targets.get(i).visited){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Ещё живой?

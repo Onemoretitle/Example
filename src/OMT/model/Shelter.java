@@ -1,5 +1,6 @@
 package OMT.model;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Shelter extends ObjectOnMap{
@@ -11,11 +12,10 @@ public class Shelter extends ObjectOnMap{
      * Товары
      */
     private int CARGO;
-
     /**
-     * Скорость восстановления жизни
+     * Живая сила
      */
-    private static final int LIFE_RECOVERY = 10;
+    private int LIFE;
 
     /**
      * Максимальное количество воды и товаров, одинаково для всех
@@ -30,6 +30,13 @@ public class Shelter extends ObjectOnMap{
      * Скорость пополнения воды
      */
     private int waterRefill;
+    /**
+     * Скорость восстановления жизни
+     */
+    private int lifeRecovery;
+
+
+    private boolean visited;
 
     /**
      * Конструктор
@@ -43,8 +50,10 @@ public class Shelter extends ObjectOnMap{
         Random r = new Random(0);
         WATER = r.nextInt(100)%100 + 10;
         CARGO = r.nextInt(50)%50 + 5;
+        LIFE = r.nextInt(100)%100 + 10;
         produceSpeed = r.nextInt(20)%20 + 1;
         waterRefill = r.nextInt(10)% 10 + 1;
+        lifeRecovery = r.nextInt(30)% 10 + 1;
 
     }
     /**
@@ -66,6 +75,25 @@ public class Shelter extends ObjectOnMap{
                 return realVolume;
             }
         }
+    /**
+     * Пополнить жизни
+     * @param _life сколько выды требуется
+     * @return сколько пополнилось
+     */
+    public int restoreLife(int _life)
+    {
+        if (LIFE>_life)
+        {
+            LIFE-=_life;
+            return _life;
+        }
+        else
+        {
+            int realVolume = LIFE;
+            LIFE = 0;
+            return realVolume;
+        }
+    }
     /**
      * Торговать
      * @param cargoVolume количество товаров
@@ -92,10 +120,11 @@ public class Shelter extends ObjectOnMap{
     {
         build();
         produceGoods();
+        recoverLife();
     }
 
     /**
-     * Рост травы
+     * Пополнение воды
      */
     private void build()
     {
@@ -105,7 +134,7 @@ public class Shelter extends ObjectOnMap{
     }
 
     /**
-     * Рост травы
+     * Производство товаров
      */
     private void produceGoods()
     {
@@ -115,19 +144,29 @@ public class Shelter extends ObjectOnMap{
     }
 
     /**
+     * Производство товаров
+     */
+    private void recoverLife()
+    {
+        if (LIFE <  MAX_VOLUME)
+            LIFE += lifeRecovery;
+        LIFE = MAX_VOLUME > LIFE ? LIFE :MAX_VOLUME;
+    }
+
+    /**
      * Для генерации цвета клетки
      * @return процент имеющегося объема травы от максимального, с точностью до 10%
      */
     public float getVolumePrecentage()
     {
-        return (float) (((CARGO + WATER)/2)*10/MAX_VOLUME) /10;
+        return (float) (((CARGO + WATER + LIFE)/3)*10/MAX_VOLUME) /10;
     }
 
     /**
      * Возвращает текущий объем воды
      * @return количество воды в поселении
      */
-    int getWATER() {
+    public  int getWATER() {
         return WATER;
     }
 
@@ -135,9 +174,15 @@ public class Shelter extends ObjectOnMap{
      * Возвращает текущий объем товаров
      * @return количество товаров в поселении
      */
-    int getCARGO() {
+    public int getCARGO() {
         return CARGO;
     }
 
+    public void getVisited(){
+        visited = true;
+    }
+    public void getUnvisited(){
+        visited = false;
+    }
     }
 
